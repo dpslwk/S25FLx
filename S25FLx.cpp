@@ -19,6 +19,25 @@
 
 // uncomment to SLOW down SPI clock during .read cycle
 //#defne SLOW_READ
+
+//Define S25FLx control bytes
+
+#define WREN            0x06    /* Write Enable */
+#define WRDI            0x04    /* Write Disable */
+#define RDSR            0x05    /* Read Status Register */
+#define WRSR            0x01    /* Write Status Register */
+#define READ            0x03    /* Read Data Bytes  */
+#define FAST_READ       0x0B    /* Read Data Bytes at Higher Speed */
+#define FAST_READ_DO    0x3B    /* Fast read with dual output's (NOT IMPLMENTED) */
+#define PP              0x02    /* Page Program  */
+#define BE              0xD8    /* Block Erase (64k)  */
+#define SE              0x20    /* Sector Erase (4k)  */
+#define CE              0xC7    /* Erase entire chip  */
+#define DP              0xB9    /* Deep Power-down  */
+#define RES             0xAB    /* Release Power-down, return Device ID */
+#define MID             0x90    /* Read Manufacture ID, Device ID */
+#define RDID            0x9F    /* Read JEDEC: Manufacture ID, memory type ID, capacity ID */
+
 //A great little tool for printing a byte as binary without it chopping off the leading zeros.
 //from http://forum.arduino.cc/index.php/topic,46320.0.html
 
@@ -91,7 +110,7 @@ void Flash::erase_4k(unsigned long loc) {
     waitforit();
     write_enable();
 
-    SPI.transfer(this->flash_cs, 0x20, SPI_CONTINUE);
+    SPI.transfer(this->flash_cs, SE, SPI_CONTINUE);
     SPI.transfer(this->flash_cs, loc >> 16, SPI_CONTINUE);
     SPI.transfer(this->flash_cs, loc >> 8, SPI_CONTINUE);
     SPI.transfer(this->flash_cs, loc & 0xFF);
@@ -106,7 +125,7 @@ void Flash::erase_64k(unsigned long loc) {
     waitforit();
     write_enable();
     
-    SPI.transfer(this->flash_cs, 0x20, SPI_CONTINUE);
+    SPI.transfer(this->flash_cs, BE, SPI_CONTINUE);
     SPI.transfer(this->flash_cs, loc >> 16, SPI_CONTINUE);
     SPI.transfer(this->flash_cs, loc >> 8, SPI_CONTINUE);
     SPI.transfer(this->flash_cs, loc & 0xFF);

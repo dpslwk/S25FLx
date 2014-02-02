@@ -13,25 +13,6 @@
  Modified by Matt Lloyd for TiLDA Mk2 (Due advance SPI)
  */
 
-//Define S25FLx control bytes
-
-#define WREN        0x06    /* Write Enable */
-#define WRDI        0x04    /* Write Disable */
-#define RDSR        0x05    /* Read Status Register */
-#define WRSR        0x01    /* Write Status Register */
-#define READ        0x03    /* Read Data Bytes  */
-#define FAST_READ   0x0B    /* Read Data Bytes at Higher Speed //Not used as as the 328 isn't fast enough  */
-#define PP          0x02    /* Page Program  */
-#define BE          0xD8    /* Block Erase (64k)  */
-#define SE          0x20    /* Sector Erase (4k)  */
-#define CE          0xC7    /* Erase entire chip  */
-#define DP          0xB9    /* Deep Power-down  */
-#define RES         0xAB    /* Release Power-down, return Device ID */
-#define MID         0x90    /* Read Manufacture ID, Device ID */
-#define RDID        0x9F    /* Read JEDEC: Manufacture ID, memory type ID, capacity ID */
-
-#define cs  10   //Chip select pin
-
 #include "arduino.h"
 #include <SPI.h>
 
