@@ -157,9 +157,8 @@ void Flash::read(unsigned long loc, uint8_t* array, unsigned long length) {
     int i;
     for (i=0; i < length-1; i++) {
         array[i] = SPI.transfer(this->flash_cs, 0, SPI_CONTINUE);   // send the data (all but the last)
-        
     }
-    array[++i] = SPI.transfer(this->flash_cs, 0);                   // send last one with SPI_LAST
+    array[i] = SPI.transfer(this->flash_cs, 0);                   // send last one with SPI_LAST
     
 #ifdef SLOW_READ
     SPI.setClockDivider(this->flash_cs, 2);                         // set SPI to 44MHz
@@ -180,7 +179,7 @@ void Flash::fast_read(unsigned long loc, uint8_t* array, unsigned long length) {
         array[i] = SPI.transfer(this->flash_cs, 0, SPI_CONTINUE);   // send the data (all but the last)
         
     }
-    array[++i] = SPI.transfer(this->flash_cs, 0);                   // send last one with SPI_LAST
+    array[i] = SPI.transfer(this->flash_cs, 0);                   // send last one with SPI_LAST
     
 }
 
@@ -295,10 +294,10 @@ void Flash::write(unsigned long loc, uint8_t* array, unsigned long length) {
             SPI.transfer(this->flash_cs, page2_loc>>8, SPI_CONTINUE);
             SPI.transfer(this->flash_cs, page2_loc & 0xff, SPI_CONTINUE);
             
-            for (i=length1; i<length-1;i++) {
+            for (i = length1; i < length-1; i++) {
                 SPI.transfer(this->flash_cs, array[i], SPI_CONTINUE);
             }
-            SPI.transfer(this->flash_cs, array[++i]);
+            SPI.transfer(this->flash_cs, array[i]);
             
             waitforit();
             //Serial.println("//////////");
@@ -324,7 +323,7 @@ void Flash::write(unsigned long loc, uint8_t* array, unsigned long length) {
             for (i=0; i < length-1; i++) {
                 SPI.transfer(this->flash_cs, array[i], SPI_CONTINUE);
             }
-            SPI.transfer(this->flash_cs, array[++i]);
+            SPI.transfer(this->flash_cs, array[i]);
             
             waitforit();
         }
