@@ -39,7 +39,7 @@ void Flash::begin() {
     digitalWrite(this->flash_hold, HIGH);
     SPI.begin(this->flash_cs);
     SPI.setBitOrder(this->flash_cs, MSBFIRST);
-    SPI.setClockDivider(this->flash_cs, 10);          // ***LWK*** we can increase this
+    SPI.setClockDivider(this->flash_cs, 2);          // With 84MHz MCK this gives 42Mhz
     SPI.setDataMode(this->flash_cs, SPI_MODE0);
     
 }
