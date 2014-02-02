@@ -25,7 +25,7 @@ void setup() {
   } // wait until serial monitor is open to begin.
   delay(250);
 
-  SPI.setClockDivider(SPI_CLOCK_DIV2); //By default the clock divider is set to 8. 
+  SPI.setClockDivider(SPI_CLOCK_DIV2); //By default the clock divider is set to 8.
 
   flash.waitforit(); // use between each communication to make sure S25FLxx is ready to go.
   flash.read_info(); //will return an error if the chip isn't wired up correctly. 
