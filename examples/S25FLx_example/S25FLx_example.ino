@@ -1,31 +1,39 @@
+/*
+ * Modified for TiLDA Mk2 by LWK
+ */
+
 #include <S25FLx.h>
 #include <SPI.h>
-#define cs  10   //Chip select pin
 #define array_length 16 //length of array to write, read, and print
-flash flash;  //starts flash class and initilzes SPI
+Flash flash(FLASH_CS, FLASH_HOLD);  //starts flash class and initilzes SPI
 
 unsigned long d,t, cycles, errors,j; 
 unsigned long location =0; //starting memory location to read and write too. 
 
 
-byte random_bank[array_length+1]={
+byte random_bank[array_length]={
 };  
 
 //start with data in it to see if it's returing 0's because it's empty or because the mremory it's reading is.
-byte read_bank[array_length+1]={
+byte read_bank[array_length]={
   16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};  
 
 /////////////////////////////////////////////////////////
 
 void setup() {
-  pinMode(cs, OUTPUT);
+  //PMIC
+  pinMode(PMIC_ENOTG, OUTPUT);
+  digitalWrite(PMIC_ENOTG, LOW);
+  
   randomSeed(A2);
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial) {
   } // wait until serial monitor is open to begin.
-  delay(250);
+  delay(500);
+  Serial.println("Flash Read Write test");
 
-  SPI.setClockDivider(SPI_CLOCK_DIV2); //By default the clock divider is set to 8.
+  // call new pin setup routine
+  flash.begin();
 
   flash.waitforit(); // use between each communication to make sure S25FLxx is ready to go.
   flash.read_info(); //will return an error if the chip isn't wired up correctly. 
@@ -42,7 +50,7 @@ void loop() {
 
   ///////////////////////////////////////////////////////random up a bank
   //Random is used to make sure it is errasing and programming.
-  for (int i=0; i<array_length+1;i++){
+  for (int i=0; i<array_length;i++){
     random_bank[i]=random(0,255);
 
   }
@@ -90,7 +98,7 @@ void loop() {
   flash.waitforit();
 
   ////////////////////////////////////////////////////check
-  for (int i=0; i<(array_length+1) ;i++){
+  for (int i=0; i<(array_length) ;i++){
     if (random_bank[i]!=read_bank[i]){
       errors++;
     }

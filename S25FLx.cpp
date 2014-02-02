@@ -10,7 +10,7 @@
  This free library is realeased under Creative comoms license CC BY-SA 3.0
  http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
   
- Modified by Matt Lloyd for TiLDA Mk2 (Due advance SPI)
+ Modified by LWK for TiLDA Mk2 (Due advance SPI)
  */
 
 #include "arduino.h"
