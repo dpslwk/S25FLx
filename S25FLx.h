@@ -35,6 +35,8 @@ public:
     void write(unsigned long loc, uint8_t* array, unsigned long length);
 	void write_reg(byte w);
 	void read_info();
+    void sleep();
+    void wake();
     
 private:
     unsigned long prev;

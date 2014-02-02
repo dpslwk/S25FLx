@@ -361,3 +361,14 @@ void Flash::read_info() {
     waitforit();
     
 }
+
+void Flash::sleep() {
+    waitforit();
+    SPI.transfer(this->flash_cs, DP);
+    
+}
+
+void Flash::wake() {
+    SPI.transfer(this->flash_cs, RES);
+}
+
