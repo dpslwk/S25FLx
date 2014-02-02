@@ -50,6 +50,7 @@ public:
 	void erase_64k(unsigned long loc);
 	void erase_all();
 	void read(unsigned long loc, uint8_t* array, unsigned long length);
+    void fast_read(unsigned long loc, uint8_t* array, unsigned long length);
     void write(unsigned long loc, uint8_t* array, unsigned long length);
 	void write_reg(byte w);
 	void read_info();

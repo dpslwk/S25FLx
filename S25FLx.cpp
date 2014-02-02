@@ -17,6 +17,8 @@
 #include <SPI.h>
 #include "S25FLx.h"
 
+// uncomment to SLOW down SPI clock during .read cycle
+//#defne SLOW_READ
 //A great little tool for printing a byte as binary without it chopping off the leading zeros.
 //from http://forum.arduino.cc/index.php/topic,46320.0.html
 
@@ -124,21 +126,43 @@ void Flash::erase_all() {
 // Read data from the flash chip. There is no limit "length". The entire memory can be read with one command.
 //read_S25(starting location, array, number of bytes);
 void Flash::read(unsigned long loc, uint8_t* array, unsigned long length) {
-
-    SPI.transfer(this->flash_cs, READ, SPI_CONTINUE);           //control byte follow by location bytes
-    SPI.transfer(this->flash_cs, loc >> 16, SPI_CONTINUE);   // convert the location integer to 3 bytes
+#ifdef SLOW_READ
+    SPI.setClockDivider(this->flash_cs, 3);                         // slow down SPI to 28MHz
+#endif
+    
+    SPI.transfer(this->flash_cs, READ, SPI_CONTINUE);               //control byte follow by location bytes
+    SPI.transfer(this->flash_cs, loc >> 16, SPI_CONTINUE);          // convert the location integer to 3 bytes
     SPI.transfer(this->flash_cs, loc >> 8, SPI_CONTINUE);
     SPI.transfer(this->flash_cs, loc & 0xff, SPI_CONTINUE);
     
     int i;
     for (i=0; i < length-1; i++) {
-        array[i] = SPI.transfer(this->flash_cs, 0, SPI_CONTINUE);  // send the data (all but the last)
+        array[i] = SPI.transfer(this->flash_cs, 0, SPI_CONTINUE);   // send the data (all but the last)
         
     }
-    array[++i] = SPI.transfer(this->flash_cs, 0); // send last one with SPI_LAST
+    array[++i] = SPI.transfer(this->flash_cs, 0);                   // send last one with SPI_LAST
     
+#ifdef SLOW_READ
+    SPI.setClockDivider(this->flash_cs, 2);                         // set SPI to 44MHz
+#endif
 }
 
+// Read data from the flash chip using Fast read command. There is no limit "length". The entire memory can be read with one command.
+void Flash::fast_read(unsigned long loc, uint8_t* array, unsigned long length) {
+    
+    SPI.transfer(this->flash_cs, READ, SPI_CONTINUE);               //control byte follow by location bytes
+    SPI.transfer(this->flash_cs, loc >> 16, SPI_CONTINUE);          // convert the location integer to 3 bytes
+    SPI.transfer(this->flash_cs, loc >> 8, SPI_CONTINUE);
+    SPI.transfer(this->flash_cs, loc & 0xff, SPI_CONTINUE);
+    SPI.transfer(this->flash_cs, 0, SPI_CONTINUE);                  // dummp byte
+    
+    int i;
+    for (i=0; i < length-1; i++) {
+        array[i] = SPI.transfer(this->flash_cs, 0, SPI_CONTINUE);   // send the data (all but the last)
+        
+    }
+    array[++i] = SPI.transfer(this->flash_cs, 0);                   // send last one with SPI_LAST
+    
 }
 
 // Programs up to 256 bytes of data to flash chip. Data must be erased first. You cannot overwrite.
