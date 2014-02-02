@@ -34,7 +34,7 @@ public:
     void fast_read(unsigned long loc, uint8_t* array, unsigned long length);
     void write(unsigned long loc, uint8_t* array, unsigned long length);
 	void write_reg(byte w);
-	void read_info();
+	byte read_info();
     void sleep();
     void wake();
     

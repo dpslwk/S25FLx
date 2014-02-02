@@ -36,8 +36,11 @@ void setup() {
   flash.begin();
 
   flash.waitforit(); // use between each communication to make sure S25FLxx is ready to go.
-  flash.read_info(); //will return an error if the chip isn't wired up correctly. 
-
+  if (!flash.read_info()){  //will return an error if the chip isn't wired up correctly.
+      while (1) {
+          // die here
+      }
+  }
 }
 
 /////////////////////////////////////////////////////////

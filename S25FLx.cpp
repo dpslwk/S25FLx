@@ -338,7 +338,7 @@ void Flash::write_reg(byte w) {
     SPI.transfer(this->flash_cs, w);
 }
 
-void Flash::read_info() {
+byte Flash::read_info() {
     SPI.transfer(this->flash_cs, RDID, SPI_CONTINUE);
     //  SPI.transfer(0);
     byte m = SPI.transfer(this->flash_cs, 0, SPI_CONTINUE);
@@ -348,6 +348,7 @@ void Flash::read_info() {
     
     if (c==0) {
         Serial.println("Cannot read S25FL. Check wiring");
+        return false;
     }
     
     Serial.print("Manufacturer ID: 0x");
@@ -358,7 +359,7 @@ void Flash::read_info() {
     Serial.println(c, HEX);
     Serial.println();
     waitforit();
-    
+    return true;
 }
 
 void Flash::sleep() {
