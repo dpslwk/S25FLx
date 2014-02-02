@@ -315,14 +315,14 @@ void Flash::write(unsigned long loc, uint8_t* array, unsigned long length) {
             write_enable(); // Must be done before writing can commence. Erase clears it.
             waitforit();
         
-            SPI.transfer(this->flash_cs, PP);
-            SPI.transfer(this->flash_cs, loc>>16);
-            SPI.transfer(this->flash_cs, loc>>8);
-            SPI.transfer(this->flash_cs, loc & 0xff);
+            SPI.transfer(this->flash_cs, PP, SPI_CONTINUE);
+            SPI.transfer(this->flash_cs, loc>>16, SPI_CONTINUE);
+            SPI.transfer(this->flash_cs, loc>>8, SPI_CONTINUE);
+            SPI.transfer(this->flash_cs, loc & 0xff, SPI_CONTINUE);
             
             int i;
             for (i=0; i < length-1; i++) {
-                SPI.transfer(this->flash_cs, array[i]);
+                SPI.transfer(this->flash_cs, array[i], SPI_CONTINUE);
             }
             SPI.transfer(this->flash_cs, array[++i]);
             
