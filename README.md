@@ -1,3 +1,6 @@
+This is a heavly modified version for use with EMFCamp TiLDA Mk2
+
+
 Arduino S25FLx Serial Flash Chip Library
 By John-Mike Reed (Dr. Bleep) of Bleep labs 
 bleeplabs.com
